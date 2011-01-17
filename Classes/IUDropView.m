@@ -24,6 +24,12 @@
 @synthesize item;
 @synthesize uploads;
 
+#define AnimationSpeed 0.05f
+#define AnimationAmount 0.15f
+#define BlockSize 5
+#define BlockRadius 2
+#define Padding 4
+
 -(id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:NSMakeRect(0, 0, SIZE, SIZE)];
     if (self) {
@@ -32,6 +38,8 @@
         
         uploads = [[NSOperationQueue alloc] init];
         [uploads setMaxConcurrentOperationCount:1];
+        
+        theta = 0;
         
         fileTypes = [[NSArray arrayWithObjects:@".png",
                                                @".jpg",
@@ -48,8 +56,29 @@
 }
 
 -(void)drawRect:(NSRect)dirtyRect {
-    [[NSColor colorWithPatternImage:[NSImage imageNamed:@"MenuBarIcon"]] set];
-    [NSBezierPath fillRect:[self frame]];
+    if ([[uploads operations] count] == 0) {
+        [[NSColor colorWithPatternImage:[NSImage
+                                         imageNamed:@"MenuBarIcon"]] set];
+        [NSBezierPath fillRect:[self frame]];
+    }
+    else {
+        NSRect frame = [self bounds];
+        NSRect rect = NSMakeRect(0,
+                                 (frame.size.height - 2 *
+                                  BlockSize - 2 * Padding) * sin(theta)
+                                    + BlockSize + Padding - 1,
+                                 frame.size.width, BlockSize);
+        [[NSColor whiteColor] set];
+        [[NSBezierPath bezierPathWithRoundedRect:rect
+                                         xRadius:BlockRadius
+                                         yRadius:BlockRadius] fill];
+        
+        [[NSColor blackColor] set];
+        rect.origin.y += 1;
+        [[NSBezierPath bezierPathWithRoundedRect:rect
+                                         xRadius:BlockRadius
+                                         yRadius:BlockRadius] fill];
+    }
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {
@@ -105,21 +134,27 @@
 -(BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
     NSPasteboard *paste = [sender draggingPasteboard];
     NSArray* files = [paste propertyListForType:NSFilenamesPboardType];
-    NSMutableArray* images = [[NSMutableArray alloc]
-                              initWithCapacity:[files count]];
+    int count = 0;
     
     // find the image files
     for (NSString* file in files) {
         NSString* down = [file lowercaseString];
         for (NSString* fileType in fileTypes) {
             if ([down hasSuffix:fileType]) {
-                [images addObject:file];
+                IUUpload* upload = [[IUUpload alloc] init];
+                [upload setFiles:[NSArray arrayWithObject:down]];
+                [upload setReddit:commandDown()];
+                [upload setCompletionBlock:^(void) {
+                    [self uploadDone];
+                }];
+                [uploads addOperation:upload];
+                [self uploadStarted];
             }
         }
     }
     
     // we need at least one image file to continue
-    return [images count] > 0;
+    return count > 0;
 }
 
 -(void)onRecent:(NSMenuItem*)sender {
@@ -130,6 +165,30 @@
              openURL:[NSURL URLWithString:[dict valueForKey:URL_KEY]]];
             return;
         }
+    }
+}
+
+-(void)timerWentOff {
+    theta += AnimationAmount;
+    [self setNeedsDisplay:YES];
+}
+
+-(void)uploadStarted {
+    if (timer == nil) {
+        theta = 0;
+        timer = [NSTimer scheduledTimerWithTimeInterval:AnimationSpeed
+                                                 target:self
+                                               selector:@selector(timerWentOff)
+                                               userInfo:nil
+                                                repeats:YES];
+    }
+}
+
+-(void)uploadDone {
+    if (timer != nil && [[uploads operations] count] == 0) {
+        [timer invalidate];
+        timer = nil;
+        [self setNeedsDisplay:YES];
     }
 }
 

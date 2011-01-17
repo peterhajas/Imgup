@@ -272,6 +272,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Imgup_Prefix.pch;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "Imgup-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Imgup;
@@ -294,6 +295,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Imgup_Prefix.pch;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "Imgup-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Imgup;

@@ -16,6 +16,7 @@
 #import "IUAppDelegate.h"
 #import "IUStatusItem.h"
 #import "IUDropView.h"
+#import "IUUpload.h"
 
 #define THUMB_SIZE 100
 
@@ -58,10 +59,10 @@
 }
 
 -(IBAction)onUploadClipboard:(NSMenuItem *)sender {
-    /*// write to a temp file
+    // write to a temp file
     
     // upload!
-    IUUpload* upload = [[IUUpload alloc] init];
+    /*IUUpload* upload = [[IUUpload alloc] init];
     [upload setFiles:[NSArray arrayWithObject:file];
     [upload setReddit:commandDown()];
     [[dropView uploads] addOperation:upload];*/

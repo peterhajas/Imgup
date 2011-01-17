@@ -19,12 +19,17 @@
     NSArray* fileTypes;
     IUStatusItem* item;
     NSOperationQueue* uploads;
+    NSTimer* timer;
+    float theta;
 }
 
 @property (readwrite, assign) IUStatusItem* item;
 @property (readonly) NSOperationQueue* uploads;
 
 -(void)onRecent:(NSMenuItem*)sender;
+-(void)uploadStarted;
+-(void)uploadDone;
+-(void)timerWentOff;
 
 @end
 
