@@ -35,7 +35,8 @@
 @synthesize recentUploads;
 
 -(void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [GrowlApplicationBridge setGrowlDelegate:@""]; 
+#warning Growl will not work if app delegate is nil
+    [GrowlApplicationBridge setGrowlDelegate:nil];
     
     // create a drop view
     dropView = [[IUDropView alloc] initWithFrame:

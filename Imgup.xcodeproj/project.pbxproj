@@ -11,7 +11,7 @@
 		4336C923121C213800090284 /* MenuBarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4336C922121C213800090284 /* MenuBarIcon.png */; };
 		4336C938121C2C9400090284 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4336C937121C2C9400090284 /* Icon.icns */; };
 		4336C954121C2E2200090284 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4336C953121C2E2200090284 /* Growl.framework */; };
-		4336C958121C2E3100090284 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4336C953121C2E2200090284 /* Growl.framework */; };
+		4336C958121C2E3100090284 /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4336C953121C2E2200090284 /* Growl.framework */; };
 		4336C972121C2F9D00090284 /* Growl Registration Ticket.growlRegDict in Resources */ = {isa = PBXBuildFile; fileRef = 4336C971121C2F9D00090284 /* Growl Registration Ticket.growlRegDict */; };
 		43D84147121B3F4B007AB813 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D84146121B3F4B007AB813 /* Cocoa.framework */; };
 		43D8414E121B3F4B007AB813 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8414D121B3F4B007AB813 /* main.m */; };
@@ -24,14 +24,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4336C95F121C2E3600090284 /* CopyFiles */ = {
+		4336C95F121C2E3600090284 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4336C958121C2E3100090284 /* Growl.framework in CopyFiles */,
+				4336C958121C2E3100090284 /* Growl.framework in Copy Frameworks */,
 			);
+			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -40,7 +41,7 @@
 		431E6D7C121C93490050229D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		4336C922121C213800090284 /* MenuBarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MenuBarIcon.png; path = Resources/MenuBarIcon.png; sourceTree = "<group>"; };
 		4336C937121C2C9400090284 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Icon.icns; path = Resources/Icon.icns; sourceTree = "<group>"; };
-		4336C953121C2E2200090284 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = Library/Frameworks/Growl.framework; sourceTree = SDKROOT; };
+		4336C953121C2E2200090284 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = Frameworks/Growl.framework; sourceTree = SOURCE_ROOT; };
 		4336C971121C2F9D00090284 /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "Resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		43D84143121B3F4B007AB813 /* Imgup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Imgup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D84146121B3F4B007AB813 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -149,7 +150,7 @@
 				43D8413F121B3F4B007AB813 /* Sources */,
 				43D84140121B3F4B007AB813 /* Frameworks */,
 				43D84141121B3F4B007AB813 /* Resources */,
-				4336C95F121C2E3600090284 /* CopyFiles */,
+				4336C95F121C2E3600090284 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -170,6 +171,7 @@
 			};
 			buildConfigurationList = 43D84139121B3F4A007AB813 /* Build configuration list for PBXProject "Imgup" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -262,10 +264,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Frameworks";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_OBJC_GC = required;
@@ -286,10 +285,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/Frameworks";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_MODEL_TUNING = G5;
