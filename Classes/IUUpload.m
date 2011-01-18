@@ -46,7 +46,6 @@
         imageData = (NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef) imageData, NULL, (CFStringRef) @";/?:@&=+$", kCFStringEncodingUTF8);
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[self uploadURL]];
         NSString* httpBody = [NSString stringWithFormat:@"image=%@&key=%@", imageData, KEY];
-        NSLog(@"HTTP POST body is %@", httpBody);
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:[httpBody dataUsingEncoding:NSUTF8StringEncoding]];
         // TODO: Make this an asynchronous request
@@ -68,7 +67,6 @@
             [NSApp presentError:error];
             continue;
         }
-        NSLog(@"Received XML response: %@", doc);
         
         NSArray* nodes = [doc nodesForXPath:@"/upload/links/original" error:&error];
         if (error) {
