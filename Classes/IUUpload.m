@@ -15,107 +15,97 @@
 #import <Growl/Growl.h>
 #import "IUAppDelegate.h"
 #import "IUUpload.h"
-
-@implementation IUUpload
+#import "NSDataBase64.h"
 
 #define KEY @"6c02d7bed348d1e3e31bdd26df79abf2"
-#define UPLOAD @"http://api.imgur.com/2/upload.xml"
-#define REDDIT_SUBMIT_URL @"http://www.reddit.com/submit?url=%@"
+
+@interface IUUpload ()
+@property (readonly) NSURL *uploadURL;
+-(NSURL *)redditURL:(NSString *)url;
+@end
+
+@implementation IUUpload
 
 @synthesize files;
 @synthesize reddit;
 
+-(NSURL *)uploadURL {
+    return [NSURL URLWithString:@"http://api.imgur.com/2/upload.xml"];
+}
+
+-(NSURL *)redditURL:(NSString *)url {
+    return [NSString stringWithFormat:@"http://www.reddit.com/submit?url=%@", url];
+}
+
 -(void)main {
-    NSAutoreleasePool* autorelease = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     NSLock* lock = [[NSLock alloc] init];
     
     for (NSString* file in files) {
-        NSTask *task;
-        task = [[NSTask alloc] init];
-        [task setLaunchPath: @"/usr/bin/curl"];
-        
-        NSArray *arguments;
-        arguments = [NSArray arrayWithObjects:
-                     [NSString stringWithFormat:@"-F image=@%@", file],
-                     [NSString stringWithFormat:@"-F key=%@", KEY],
-                     UPLOAD,
-                     nil];
-        
-        [task setArguments: arguments];
-        
-        NSPipe *pipe;
-        pipe = [NSPipe pipe];
-        [task setStandardOutput: pipe];
-        
-        NSFileHandle *handle;
-        handle = [pipe fileHandleForReading];
-        
-        [task launch];
-        
-        NSData *data;
-        data = [handle readDataToEndOfFile];
-        
-        NSString *string;
-        string = [[NSString alloc] initWithData:data
-                                       encoding:NSUTF8StringEncoding];
-        
-        // find the image and copy it to the clipboard
+        NSString* imageData = [[NSData dataWithContentsOfFile:file] base64EncodedString];
+        imageData = (NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef) imageData, NULL, (CFStringRef) @";/?:@&=+$", kCFStringEncodingUTF8);
+        NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[self uploadURL]];
+        NSString* httpBody = [NSString stringWithFormat:@"image=%@&key=%@", imageData, KEY];
+        NSLog(@"HTTP POST body is %@", httpBody);
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:[httpBody dataUsingEncoding:NSUTF8StringEncoding]];
+        // TODO: Make this an asynchronous request
+        NSURLResponse* response = nil;
         NSError* error = nil;
-        NSXMLDocument* doc = [[[NSXMLDocument alloc] initWithXMLString:string
-                                                              options:0
-                                                                error:&error]
-                              autorelease];
+        NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        if (!responseData) {
+            NSLog(@"Upload for %@ failed", file);
+            continue;
+        }
         if (error) {
             [NSApp presentError:error];
             continue;
         }
         
-        NSArray* nodes = [doc nodesForXPath:@"/upload/links/original"
-                                      error:&error];
-        NSString* url = [[nodes objectAtIndex:0] stringValue];
-        
+        NSString* xml = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+        NSXMLDocument* doc = [[[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error] autorelease];
         if (error) {
             [NSApp presentError:error];
             continue;
         }
+        NSLog(@"Received XML response: %@", doc);
         
+        NSArray* nodes = [doc nodesForXPath:@"/upload/links/original" error:&error];
+        if (error) {
+            [NSApp presentError:error];
+            continue;
+        }
         if ([nodes count] != 1) {
-            NSLog(@"Wrong amount of nodes: %u", (uint)[nodes count]);
+            NSLog(@"Wrong number of nodes: %u", (uint) [nodes count]);
         }
+        NSString *url = [[nodes objectAtIndex:0] stringValue];
+        NSLog(@"Received imgur URL: %@", url);
         
         if (reddit) {
-            NSURL* redditURL = [NSURL URLWithString:
-                                [NSString
-                                 stringWithFormat:REDDIT_SUBMIT_URL, url]];
-            [[NSWorkspace sharedWorkspace] openURL:redditURL];
-        }
-        else {
+            [[NSWorkspace sharedWorkspace] openURL:[self redditURL:url]];
+        } else {
             NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-            [pasteboard declareTypes:[NSArray arrayWithObjects:
-                                      NSStringPboardType,
-                                      nil]
-                               owner:nil];
+            [pasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
             [pasteboard setString:url forType:NSStringPboardType];
         }
         
-        // notify that the upload is finished
+        // Notify that the upload is finished
         [[NSSound soundNamed:@"Glass"] play];
-        [GrowlApplicationBridge notifyWithTitle:@"Upload Complete"
+        [GrowlApplicationBridge notifyWithTitle:NSLocalizedString(@"Upload Complete", nil)
                                     description:url
                                notificationName:@"Upload Complete"
-                                       iconData:[NSData
-                                                 dataWithContentsOfFile:file]
+                                       iconData:[NSData dataWithContentsOfFile:file]
                                        priority:0
                                        isSticky:NO
                                    clickContext:nil];
         
-        // keep track of the images we've uploaded
+        // Keep track of images we've uploaded
         [lock lock];
         [[NSApp delegate] addImage:file withImgurUrl:url];
         [lock unlock];
     }
     
-    [autorelease release];
+    [pool release];
 }
 
 @end

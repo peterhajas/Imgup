@@ -21,6 +21,7 @@
 		43E73F3E121B48C70039D8AB /* IUDropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E73F3D121B48C70039D8AB /* IUDropView.m */; };
 		43E73FE9121B60C50039D8AB /* IUStatusItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E73FE8121B60C50039D8AB /* IUStatusItem.m */; };
 		43E74031121B64740039D8AB /* IUUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E74030121B64740039D8AB /* IUUpload.m */; };
+		B79C048F12E5FC18007A2214 /* NSDataBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = B79C048E12E5FC18007A2214 /* NSDataBase64.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +59,8 @@
 		43E73FE8121B60C50039D8AB /* IUStatusItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUStatusItem.m; sourceTree = "<group>"; };
 		43E7402F121B64740039D8AB /* IUUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUUpload.h; sourceTree = "<group>"; };
 		43E74030121B64740039D8AB /* IUUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUUpload.m; sourceTree = "<group>"; };
+		B79C048D12E5FC18007A2214 /* NSDataBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSDataBase64.h; path = Classes/NSDataBase64.h; sourceTree = "<group>"; };
+		B79C048E12E5FC18007A2214 /* NSDataBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSDataBase64.m; path = Classes/NSDataBase64.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +106,8 @@
 		43D8413C121B3F4B007AB813 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B79C048D12E5FC18007A2214 /* NSDataBase64.h */,
+				B79C048E12E5FC18007A2214 /* NSDataBase64.m */,
 				43D84149121B3F4B007AB813 /* Imgup_Prefix.pch */,
 				43D8414D121B3F4B007AB813 /* main.m */,
 			);
@@ -211,6 +216,7 @@
 				43E73F3E121B48C70039D8AB /* IUDropView.m in Sources */,
 				43E73FE9121B60C50039D8AB /* IUStatusItem.m in Sources */,
 				43E74031121B64740039D8AB /* IUUpload.m in Sources */,
+				B79C048F12E5FC18007A2214 /* NSDataBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
