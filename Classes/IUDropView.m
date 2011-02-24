@@ -63,21 +63,25 @@
     }
     else {
         NSRect frame = [self bounds];
-        NSRect rect = NSMakeRect(0,
-                                 (frame.size.height - 2 *
-                                  BlockSize - 2 * Padding) * sin(theta)
-                                    + BlockSize + Padding - 1,
-                                 frame.size.width, BlockSize);
-        [[NSColor whiteColor] set];
-        [[NSBezierPath bezierPathWithRoundedRect:rect
-                                         xRadius:BlockRadius
-                                         yRadius:BlockRadius] fill];
-        
-        [[NSColor blackColor] set];
-        rect.origin.y += 1;
-        [[NSBezierPath bezierPathWithRoundedRect:rect
-                                         xRadius:BlockRadius
-                                         yRadius:BlockRadius] fill];
+            
+        for (int i = 0; i < 3; i++) {
+            NSRect rect = NSMakeRect((frame.size.width / 3) * i,
+                                     (frame.size.height - 2 *
+                                      BlockSize - 2 * Padding) * sin(theta + 1 * i)
+                                        + BlockSize + Padding - 1,
+                                     BlockSize, BlockSize);
+            
+            [[NSColor whiteColor] set];
+            [[NSBezierPath bezierPathWithRoundedRect:rect
+                                             xRadius:BlockRadius
+                                             yRadius:BlockRadius] fill];
+            
+            [[NSColor blackColor] set];
+            rect.origin.y += 1;
+            [[NSBezierPath bezierPathWithRoundedRect:rect
+                                             xRadius:BlockRadius
+                                             yRadius:BlockRadius] fill];
+        }
     }
 }
 
