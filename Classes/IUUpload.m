@@ -53,6 +53,13 @@
         NSError* error = nil;
         NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         if (!responseData) {
+            [GrowlApplicationBridge notifyWithTitle:NSLocalizedString(@"Upload Failed", nil)
+                                        description:[[NSURL URLWithString:file] lastPathComponent]
+                                   notificationName:@"Upload Failed"
+                                           iconData:nil
+                                           priority:0
+                                           isSticky:NO
+                                       clickContext:nil];
             NSLog(@"Upload for %@ failed", file);
             continue;
         }

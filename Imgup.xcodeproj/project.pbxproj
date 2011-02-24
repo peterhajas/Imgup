@@ -176,7 +176,6 @@
 			};
 			buildConfigurationList = 43D84139121B3F4A007AB813 /* Build configuration list for PBXProject "Imgup" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

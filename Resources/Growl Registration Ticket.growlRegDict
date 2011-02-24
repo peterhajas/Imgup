@@ -8,11 +8,13 @@
         <key>AllNotifications</key>
         <array>
             <string>Upload Complete</string>
+            <string>Upload Failed</string>
         </array>
         
         <key>DefaultNotifications</key>
         <array>
             <string>Upload Complete</string>
+            <string>Upload Failed</string>
         </array>
     </dict>
 </plist>
