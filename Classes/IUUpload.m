@@ -43,15 +43,23 @@
     
     for (NSString* file in files) {
         NSString* imageData = [[NSData dataWithContentsOfFile:file] base64EncodedString];
-        imageData = (NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef) imageData, NULL, (CFStringRef) @";/?:@&=+$", kCFStringEncodingUTF8);
+        imageData = (NSString*)CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                                       (CFStringRef)imageData,
+                                                                       NULL,
+                                                                       (CFStringRef)@";/?:@&=+$",
+                                                                       kCFStringEncodingUTF8);
+        
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[self uploadURL]];
         NSString* httpBody = [NSString stringWithFormat:@"image=%@&key=%@", imageData, KEY];
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:[httpBody dataUsingEncoding:NSUTF8StringEncoding]];
+        
         // TODO: Make this an asynchronous request
         NSURLResponse* response = nil;
         NSError* error = nil;
-        NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        NSData* responseData = [NSURLConnection sendSynchronousRequest:request
+                                                     returningResponse:&response
+                                                                 error:&error];
         if (!responseData) {
             [GrowlApplicationBridge notifyWithTitle:NSLocalizedString(@"Upload Failed", nil)
                                         description:[[NSURL URLWithString:file] lastPathComponent]
@@ -68,8 +76,11 @@
             continue;
         }
         
-        NSString* xml = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-        NSXMLDocument* doc = [[[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error] autorelease];
+        NSString* xml = [[NSString alloc] initWithData:responseData
+                                              encoding:NSUTF8StringEncoding];
+        NSXMLDocument* doc = [[NSXMLDocument alloc] initWithXMLString:xml
+                                                              options:0
+                                                                error:&error];
         if (error) {
             [NSApp presentError:error];
             continue;
@@ -90,7 +101,8 @@
             [[NSWorkspace sharedWorkspace] openURL:[self redditURL:url]];
         } else {
             NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-            [pasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+            [pasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType]
+                               owner:nil];
             [pasteboard setString:url forType:NSStringPboardType];
         }
         
