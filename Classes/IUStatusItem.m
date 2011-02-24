@@ -18,10 +18,12 @@
 
 @implementation IUStatusItem
 
--(id)initWithView:(IUDropView*)dropView menu:(NSMenu*)menu {
+-(id)initWithView:(IUDropView*)dropView menu:(NSMenu*)menu
+{
     self = [[[NSStatusBar systemStatusBar]
              statusItemWithLength:SIZE] retain];
-    if (self) {
+    if (self)
+    {
         [self setMenu:menu];
         [self setView:dropView];
         [dropView setItem:self];

@@ -15,7 +15,8 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface IUUpload : NSOperation {
+@interface IUUpload : NSOperation
+{
     NSArray* files;
     bool reddit;
 }

@@ -29,15 +29,18 @@
 @synthesize files;
 @synthesize reddit;
 
--(NSURL *)uploadURL {
+-(NSURL *)uploadURL
+{
     return [NSURL URLWithString:@"http://api.imgur.com/2/upload.xml"];
 }
 
--(NSURL *)redditURL:(NSString *)url {
+-(NSURL *)redditURL:(NSString *)url
+{
     return [NSString stringWithFormat:@"http://www.reddit.com/submit?url=%@", url];
 }
 
--(void)main {
+-(void)main
+{
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     NSLock* lock = [[NSLock alloc] init];
     
@@ -60,7 +63,8 @@
         NSData* responseData = [NSURLConnection sendSynchronousRequest:request
                                                      returningResponse:&response
                                                                  error:&error];
-        if (!responseData) {
+        if (!responseData)
+        {
             [GrowlApplicationBridge notifyWithTitle:NSLocalizedString(@"Upload Failed", nil)
                                         description:[[NSURL URLWithString:file] lastPathComponent]
                                    notificationName:@"Upload Failed"
@@ -71,7 +75,8 @@
             NSLog(@"Upload for %@ failed", file);
             continue;
         }
-        if (error) {
+        if (error)
+        {
             [NSApp presentError:error];
             continue;
         }
@@ -81,25 +86,33 @@
         NSXMLDocument* doc = [[NSXMLDocument alloc] initWithXMLString:xml
                                                               options:0
                                                                 error:&error];
-        if (error) {
+        if (error)
+        {
             [NSApp presentError:error];
             continue;
         }
         
         NSArray* nodes = [doc nodesForXPath:@"/upload/links/original" error:&error];
-        if (error) {
+        if (error)
+        {
             [NSApp presentError:error];
             continue;
         }
-        if ([nodes count] != 1) {
+        
+        if ([nodes count] != 1)
+        {
             NSLog(@"Wrong number of nodes: %u", (uint) [nodes count]);
         }
+        
         NSString *url = [[nodes objectAtIndex:0] stringValue];
         NSLog(@"Received imgur URL: %@", url);
         
-        if (reddit) {
+        if (reddit)
+        {
             [[NSWorkspace sharedWorkspace] openURL:[self redditURL:url]];
-        } else {
+        }
+        else
+        {
             NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
             [pasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType]
                                owner:nil];

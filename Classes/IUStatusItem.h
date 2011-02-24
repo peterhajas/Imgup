@@ -16,8 +16,8 @@
 
 @class IUDropView;
     
-@interface IUStatusItem : NSStatusItem {
-
+@interface IUStatusItem : NSStatusItem
+{
 }
 
 -(id)initWithView:(IUDropView*)dropView menu:(NSMenu*)menu;

@@ -34,7 +34,8 @@
 @synthesize history;
 @synthesize recentUploads;
 
--(void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+-(void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
 #warning Growl will not work if app delegate is nil
     [GrowlApplicationBridge setGrowlDelegate:nil];
     
@@ -55,11 +56,12 @@
     }
 }
 
--(IBAction)onPreferences:(NSMenuItem *)sender {
-    
+-(IBAction)onPreferences:(NSMenuItem *)sender
+{    
 }
 
--(IBAction)onUploadClipboard:(NSMenuItem *)sender {
+-(IBAction)onUploadClipboard:(NSMenuItem *)sender
+{
     // write to a temp file
     
     // upload!
@@ -69,11 +71,13 @@
     [[dropView uploads] addOperation:upload];*/
 }
 
--(IBAction)onQuit:(NSMenuItem *)sender {
+-(IBAction)onQuit:(NSMenuItem *)sender
+{
     [NSApp terminate:nil];
 }
 
--(void)addImage:(NSString*)file withImgurUrl:(NSString*)url {
+-(void)addImage:(NSString*)file withImgurUrl:(NSString*)url
+{
     NSMutableDictionary* dict = [[NSMutableDictionary alloc]
                                  initWithCapacity:2];
     
@@ -89,11 +93,13 @@
     // find the size that will fit the image within 100x100
     NSSize origSize = [image size];
     NSSize size = origSize;
-    if (size.width > size.height) {
+    if (size.width > size.height)
+    {
         size.height = (size.height / size.width) * THUMB_SIZE;
         size.width = THUMB_SIZE;
     }
-    else {
+    else
+    {
         size.width = (size.width / size.height) * THUMB_SIZE;
         size.height = THUMB_SIZE;
     }
@@ -122,7 +128,8 @@
     [history writeToFile:HISTORY_FILE atomically:YES];
 }
 
--(NSString*)applicationSupportDirectory {
+-(NSString*)applicationSupportDirectory
+{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(
         NSApplicationSupportDirectory,
 		NSUserDomainMask, YES);
@@ -131,11 +138,13 @@
     return [basePath stringByAppendingPathComponent:@"Imgup"];
 }
 
--(NSString*)imagePath:(NSString*)filename {
+-(NSString*)imagePath:(NSString*)filename
+{
     // create the thumbnail directory if needed
     NSString* path = [NSString stringWithFormat:@"%@/Thumbnails/",
                       [[NSApp delegate] applicationSupportDirectory]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath: path] == NO) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath: path] == NO)
+    {
         [[NSFileManager defaultManager] createDirectoryAtPath:path
                                   withIntermediateDirectories:YES
                                                    attributes:nil

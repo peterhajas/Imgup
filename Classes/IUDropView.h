@@ -15,7 +15,8 @@
 #import <Cocoa/Cocoa.h>
 #import "IUStatusItem.h"
 
-@interface IUDropView : NSView {
+@interface IUDropView : NSView
+{
     NSArray* fileTypes;
     IUStatusItem* item;
     NSOperationQueue* uploads;

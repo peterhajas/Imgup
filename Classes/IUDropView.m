@@ -30,9 +30,11 @@
 #define BlockRadius 2
 #define Padding 4
 
--(id)initWithFrame:(NSRect)frame {
+-(id)initWithFrame:(NSRect)frame
+{
     self = [super initWithFrame:NSMakeRect(0, 0, SIZE, SIZE)];
-    if (self) {
+    if (self)
+    {
         [self registerForDraggedTypes:
          [NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
         
@@ -55,16 +57,20 @@
     return self;
 }
 
--(void)drawRect:(NSRect)dirtyRect {
-    if ([[uploads operations] count] == 0) {
+-(void)drawRect:(NSRect)dirtyRect
+{
+    if ([[uploads operations] count] == 0)
+    {
         [[NSColor colorWithPatternImage:[NSImage
                                          imageNamed:@"MenuBarIcon"]] set];
         [NSBezierPath fillRect:[self frame]];
     }
-    else {
+    else
+    {
         NSRect frame = [self bounds];
             
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++)
+        {
             NSRect rect = NSMakeRect((frame.size.width / 3) * i,
                                      (frame.size.height - 2 *
                                       BlockSize - 2 * Padding) * sin(theta + 1 * i)
@@ -85,17 +91,21 @@
     }
 }
 
--(void)mouseDown:(NSEvent *)theEvent {
+-(void)mouseDown:(NSEvent *)theEvent
+{
     // create the recent uploads menu
     NSArray* history = [[NSApp delegate] history];
-    if ([history count] == 0) {
+    if ([history count] == 0)
+    {
         [[[NSApp delegate] recentUploads] setEnabled:NO];
     }
-    else {
+    else
+    {
         [[[NSApp delegate] recentUploads] setEnabled:YES];
         
         NSMenu* menu = [[NSMenu alloc] init];
-        for (int i = 0; i < RECENT_COUNT && i < [history count]; i++) {
+        for (int i = 0; i < RECENT_COUNT && i < [history count]; i++)
+        {
             NSMenuItem* menuItem = [[NSMenuItem alloc] init];
             [menuItem setTitle:[[history objectAtIndex:i]
                                 valueForKey:FILE_KEY]];
@@ -117,16 +127,20 @@
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
     NSPasteboard *paste = [sender draggingPasteboard];
     
-    if (![[paste types] containsObject:NSFilenamesPboardType]) {
+    if (![[paste types] containsObject:NSFilenamesPboardType])
+    {
         return NSDragOperationNone;
     }
     
     // we need at least one image file to continue (non-images will be ignored)
     NSArray* files = [paste propertyListForType:NSFilenamesPboardType];
-    for (NSString* file in files) {
+    for (NSString* file in files)
+    {
         NSString* down = [file lowercaseString];
-        for (NSString* fileType in fileTypes) {
-            if ([down hasSuffix:fileType]) {
+        for (NSString* fileType in fileTypes)
+        {
+            if ([down hasSuffix:fileType])
+            {
                 return NSDragOperationCopy;
             }
         }
@@ -135,16 +149,20 @@
     return NSDragOperationNone;
 }
 
--(BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
+-(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
     NSPasteboard *paste = [sender draggingPasteboard];
     NSArray* files = [paste propertyListForType:NSFilenamesPboardType];
     int count = 0;
     
     // find the image files
-    for (NSString* file in files) {
+    for (NSString* file in files)
+    {
         NSString* down = [file lowercaseString];
-        for (NSString* fileType in fileTypes) {
-            if ([down hasSuffix:fileType]) {
+        for (NSString* fileType in fileTypes)
+        {
+            if ([down hasSuffix:fileType])
+            {
                 IUUpload* upload = [[IUUpload alloc] init];
                 [upload setFiles:[NSArray arrayWithObject:down]];
                 [upload setReddit:commandDown()];
@@ -161,10 +179,12 @@
     return count > 0;
 }
 
--(void)onRecent:(NSMenuItem*)sender {
+-(void)onRecent:(NSMenuItem*)sender
+{
     NSArray* history = [[NSApp delegate] history];
     for (NSDictionary* dict in history) {
-        if ([[dict valueForKey:FILE_KEY] isEqualToString:[sender title]]) {
+        if ([[dict valueForKey:FILE_KEY] isEqualToString:[sender title]])
+        {
             [[NSWorkspace sharedWorkspace]
              openURL:[NSURL URLWithString:[dict valueForKey:URL_KEY]]];
             return;
@@ -172,13 +192,16 @@
     }
 }
 
--(void)timerWentOff {
+-(void)timerWentOff
+{
     theta += AnimationAmount;
     [self setNeedsDisplay:YES];
 }
 
--(void)uploadStarted {
-    if (timer == nil) {
+-(void)uploadStarted
+{
+    if (timer == nil)
+    {
         theta = 0;
         timer = [NSTimer scheduledTimerWithTimeInterval:AnimationSpeed
                                                  target:self
@@ -188,8 +211,10 @@
     }
 }
 
--(void)uploadDone {
-    if (timer != nil && [[uploads operations] count] == 0) {
+-(void)uploadDone
+{
+    if (timer != nil && [[uploads operations] count] == 0)
+    {
         [timer invalidate];
         timer = nil;
         [self setNeedsDisplay:YES];
@@ -198,7 +223,8 @@
 
 @end
 
-bool commandDown() {
+bool commandDown()
+{
     CGEventSourceStateID eventSource = kCGEventSourceStateCombinedSessionState;
     return CGEventSourceKeyState(eventSource, kVK_Command);
 }

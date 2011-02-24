@@ -15,7 +15,8 @@
 #import <Cocoa/Cocoa.h>
 #import "IUDropView.h"
 
-@interface IUAppDelegate : NSObject <NSApplicationDelegate> {
+@interface IUAppDelegate : NSObject <NSApplicationDelegate>
+{
     NSStatusItem *item;
     IUDropView* dropView;
     IBOutlet NSMenu* menu;
